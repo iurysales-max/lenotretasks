@@ -56,7 +56,8 @@ function EntityManager({ type, title }: { type: "sectors" | "categories"; title:
 
   const save = async () => {
     const it = dlg.item!;
-    const payload = { name: it.name, description: it.description ?? null, color: it.color ?? "#22c55e", icon: it.icon ?? (type === "sectors" ? "Briefcase" : "Tag") };
+    if (!it.name?.trim()) { toast.error("Nome obrigatório"); return; }
+    const payload = { name: it.name.trim(), description: it.description ?? null, color: it.color ?? "#22c55e", icon: it.icon ?? (type === "sectors" ? "Briefcase" : "Tag") };
     if (it.id) await supabase.from(type).update(payload).eq("id", it.id);
     else await supabase.from(type).insert(payload);
     toast.success("Salvo");
