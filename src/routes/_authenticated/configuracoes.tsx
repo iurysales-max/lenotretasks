@@ -120,7 +120,8 @@ function StatusManager() {
 
   const save = async () => {
     const it = dlg.item!;
-    const payload = { name: it.name, color: it.color ?? "#94a3b8", position: it.position ?? 0, is_done: !!it.is_done };
+    if (!it.name?.trim()) { toast.error("Nome obrigatório"); return; }
+    const payload = { name: it.name.trim(), color: it.color ?? "#94a3b8", position: it.position ?? 0, is_done: !!it.is_done };
     if (it.id) await supabase.from("task_statuses").update(payload).eq("id", it.id);
     else await supabase.from("task_statuses").insert(payload);
     toast.success("Salvo");
