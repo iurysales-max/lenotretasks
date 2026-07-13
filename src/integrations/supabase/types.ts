@@ -192,6 +192,54 @@ export type Database = {
           },
         ]
       }
+      mentions: {
+        Row: {
+          comment_id: string | null
+          context: string | null
+          created_at: string
+          id: string
+          mentioned_by_id: string
+          mentioned_user_id: string
+          read_at: string | null
+          task_id: string | null
+        }
+        Insert: {
+          comment_id?: string | null
+          context?: string | null
+          created_at?: string
+          id?: string
+          mentioned_by_id: string
+          mentioned_user_id: string
+          read_at?: string | null
+          task_id?: string | null
+        }
+        Update: {
+          comment_id?: string | null
+          context?: string | null
+          created_at?: string
+          id?: string
+          mentioned_by_id?: string
+          mentioned_user_id?: string
+          read_at?: string | null
+          task_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentions_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "task_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
@@ -470,6 +518,33 @@ export type Database = {
           },
         ]
       }
+      task_list_shares: {
+        Row: {
+          created_at: string
+          id: string
+          owner_id: string
+          permission: Database["public"]["Enums"]["share_permission"]
+          shared_with_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          owner_id: string
+          permission?: Database["public"]["Enums"]["share_permission"]
+          shared_with_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          owner_id?: string
+          permission?: Database["public"]["Enums"]["share_permission"]
+          shared_with_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       task_statuses: {
         Row: {
           color: string
@@ -615,10 +690,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_share_access: {
+        Args: { _owner_id: string; _viewer_id: string }
+        Returns: boolean
+      }
+      has_share_edit: {
+        Args: { _owner_id: string; _viewer_id: string }
+        Returns: boolean
+      }
       is_admin_or_rh: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "rh" | "gestor" | "colaborador"
+      share_permission: "view" | "edit"
       task_priority: "baixa" | "normal" | "alta" | "urgente"
       user_status: "active" | "inactive"
     }
@@ -749,6 +833,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "rh", "gestor", "colaborador"],
+      share_permission: ["view", "edit"],
       task_priority: ["baixa", "normal", "alta", "urgente"],
       user_status: ["active", "inactive"],
     },
