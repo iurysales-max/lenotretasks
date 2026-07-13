@@ -252,14 +252,23 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
                               <span className="font-medium">{p?.name}</span>
                               <span className="text-xs text-muted-foreground">{format(parseISO(c.created_at), "d MMM HH:mm", { locale: ptBR })}</span>
                             </div>
-                            <div>{c.content}</div>
+                            <div className="whitespace-pre-wrap">{renderMentions(c.content, profiles)}</div>
                           </div>
                         </div>
                       );
                     })}
                   </div>
-                  <div className="flex gap-2">
-                    <Input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Escreva um comentário..." onKeyDown={(e) => e.key === "Enter" && addComment.mutate()} />
+                  <div className="flex gap-2 items-end">
+                    <div className="flex-1">
+                      <MentionTextarea
+                        value={newComment}
+                        onChange={setNewComment}
+                        onSubmit={() => addComment.mutate()}
+                        profiles={profiles}
+                        placeholder="Escreva um comentário... use @ para mencionar"
+                        rows={2}
+                      />
+                    </div>
                     <Button onClick={() => addComment.mutate()} size="icon"><Send className="w-4 h-4" /></Button>
                   </div>
                 </TabsContent>
