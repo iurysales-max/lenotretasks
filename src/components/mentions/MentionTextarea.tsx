@@ -1,4 +1,4 @@
-import { useRef, useState, type KeyboardEvent, type ChangeEvent } from "react";
+import { useRef, useState, type KeyboardEvent, type ChangeEvent, type ReactNode } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { ProfileLite } from "@/lib/workspace-data";
@@ -121,8 +121,8 @@ export function parseMentions(text: string, profiles: ProfileLite[]): string[] {
 }
 
 /** Renders text with @mentions highlighted. */
-export function renderMentions(text: string, profiles: ProfileLite[]): (string | JSX.Element)[] {
-  const parts: (string | JSX.Element)[] = [];
+export function renderMentions(text: string, profiles: ProfileLite[]): ReactNode[] {
+  const parts: ReactNode[] = [];
   const normalized = text.replace(/\u00A0/g, " ");
   const names = profiles.map((p) => p.name).sort((a, b) => b.length - a.length);
   if (!names.length) return [normalized];
