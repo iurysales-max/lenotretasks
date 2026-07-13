@@ -18,6 +18,7 @@ import { ptBR } from "date-fns/locale";
 import { MessageSquare, Paperclip, ListChecks, Star, Copy, Archive, Trash2, Plus, Send } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { fetchCategories, fetchProfiles, fetchSectors, fetchStatuses, PRIORITY_META, type Priority, type Task } from "@/lib/workspace-data";
+import { MentionTextarea, parseMentions, renderMentions } from "@/components/mentions/MentionTextarea";
 
 interface Props {
   taskId: string | null;
@@ -127,7 +128,17 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
   const addComment = useMutation({
     mutationFn: async () => {
       if (!taskId || !newComment.trim()) return;
-      await supabase.from("task_comments").insert({ task_id: taskId, user_id: user!.id, content: newComment.trim() });
+      const content = newComment.trim();
+      const { data: c } = await supabase.from("task_comments").insert({ task_id: taskId, user_id: user!.id, content }).select().single();
+      const mentioned = parseMentions(content, profiles).filter((uid) => uid !== user!.id);
+      if (mentioned.length && c) {
+        await supabase.from("mentions").insert(mentioned.map((uid) => ({
+          mentioned_user_id: uid, mentioned_by_id: user!.id, task_id: taskId, comment_id: c.id, context: content.slice(0, 200),
+        })));
+        await supabase.from("notifications").insert(mentioned.map((uid) => ({
+          user_id: uid, title: "Você foi mencionado", message: content.slice(0, 140), type: "mention",
+        })));
+      }
     },
     onSuccess: () => { setNewComment(""); qc.invalidateQueries({ queryKey: ["task-comments", taskId] }); },
   });
@@ -241,14 +252,23 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
                               <span className="font-medium">{p?.name}</span>
                               <span className="text-xs text-muted-foreground">{format(parseISO(c.created_at), "d MMM HH:mm", { locale: ptBR })}</span>
                             </div>
-                            <div>{c.content}</div>
+                            <div className="whitespace-pre-wrap">{renderMentions(c.content, profiles)}</div>
                           </div>
                         </div>
                       );
                     })}
                   </div>
-                  <div className="flex gap-2">
-                    <Input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Escreva um comentário..." onKeyDown={(e) => e.key === "Enter" && addComment.mutate()} />
+                  <div className="flex gap-2 items-end">
+                    <div className="flex-1">
+                      <MentionTextarea
+                        value={newComment}
+                        onChange={setNewComment}
+                        onSubmit={() => addComment.mutate()}
+                        profiles={profiles}
+                        placeholder="Escreva um comentário... use @ para mencionar"
+                        rows={2}
+                      />
+                    </div>
                     <Button onClick={() => addComment.mutate()} size="icon"><Send className="w-4 h-4" /></Button>
                   </div>
                 </TabsContent>
