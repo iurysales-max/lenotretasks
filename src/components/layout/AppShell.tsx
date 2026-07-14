@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import {
   LayoutDashboard, ListTodo, Calendar, Users, Settings, Bell, Search,
-  LogOut, Moon, Sun, Leaf, KanbanSquare, BarChart3, Share2,
+  LogOut, Moon, Sun, Leaf, KanbanSquare, BarChart3, Share2, UserCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
