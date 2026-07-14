@@ -1,0 +1,1 @@
+DELETE FROM public.tasks WHERE title IN ('t1','test-after-fix','debug test');
