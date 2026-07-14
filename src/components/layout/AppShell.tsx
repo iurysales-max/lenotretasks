@@ -112,6 +112,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>{profile?.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate({ to: "/perfil" })}>
+                <UserCircle className="w-4 h-4 mr-2" /> Meu perfil
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={toggle}>
                 {theme === "dark" ? <Sun className="w-4 h-4 mr-2" /> : <Moon className="w-4 h-4 mr-2" />}
                 Modo {theme === "dark" ? "claro" : "escuro"}
