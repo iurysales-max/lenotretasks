@@ -21,8 +21,6 @@ import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-
-const { profile, roles, user } = useAuth(); // adicionado agora 
 const nav = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/tarefas", icon: ListTodo, label: "Tarefas", roles: ["admin", "rh", "gestor", "colaborador"] as const },
