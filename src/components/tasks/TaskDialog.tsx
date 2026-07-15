@@ -15,7 +15,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { MessageSquare, Paperclip, ListChecks, Star, Copy, Archive, Trash2, Plus, Send } from "lucide-react";
+import { MessageSquare, Paperclip, ListChecks, Star, Copy, Archive, Trash2, Plus, Send, Lock } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/lib/auth-context";
 import { fetchCategories, fetchProfiles, fetchSectors, fetchStatuses, PRIORITY_META, type Priority, type Task } from "@/lib/workspace-data";
 import { MentionTextarea, parseMentions, renderMentions } from "@/components/mentions/MentionTextarea";
@@ -100,6 +101,7 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
           due_time: rest.due_time ?? null,
           estimated_minutes: rest.estimated_minutes ?? null,
           created_by: user!.id,
+          is_private: rest.is_private ?? false,
         }).select().single();
         if (error) throw error;
         if (assignedUsers?.length) {
@@ -341,6 +343,16 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
             <div>
               <Label className="text-xs">Tempo estimado (min)</Label>
               <Input type="number" value={current.estimated_minutes ?? ""} onChange={(e) => setDraft({ ...draft, estimated_minutes: e.target.value ? Number(e.target.value) : null })} className="mt-1" />
+            </div>
+            <div className="flex items-center justify-between rounded-md border p-2.5 bg-accent/30">
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4 text-muted-foreground" />
+                <div>
+                  <div className="text-sm font-medium">Tarefa particular</div>
+                  <div className="text-[11px] text-muted-foreground">Só você e responsáveis atribuídos veem</div>
+                </div>
+              </div>
+              <Switch checked={!!current.is_private} onCheckedChange={(v) => setDraft({ ...draft, is_private: v })} />
             </div>
             <div>
               <Label className="text-xs">Responsáveis</Label>

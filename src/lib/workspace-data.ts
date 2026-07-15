@@ -22,6 +22,7 @@ export interface Task {
   pinned: boolean;
   archived: boolean;
   tags: string[];
+  is_private: boolean;
   created_at: string;
   updated_at: string;
 }
