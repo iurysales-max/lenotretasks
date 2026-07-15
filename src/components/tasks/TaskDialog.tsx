@@ -344,6 +344,16 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
               <Label className="text-xs">Tempo estimado (min)</Label>
               <Input type="number" value={current.estimated_minutes ?? ""} onChange={(e) => setDraft({ ...draft, estimated_minutes: e.target.value ? Number(e.target.value) : null })} className="mt-1" />
             </div>
+            <div className="flex items-center justify-between rounded-md border p-2.5 bg-accent/30">
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4 text-muted-foreground" />
+                <div>
+                  <div className="text-sm font-medium">Tarefa particular</div>
+                  <div className="text-[11px] text-muted-foreground">Só você e responsáveis atribuídos veem</div>
+                </div>
+              </div>
+              <Switch checked={!!current.is_private} onCheckedChange={(v) => setDraft({ ...draft, is_private: v })} />
+            </div>
             <div>
               <Label className="text-xs">Responsáveis</Label>
               <div className="mt-1 space-y-1 max-h-40 overflow-y-auto border rounded-md p-2">
