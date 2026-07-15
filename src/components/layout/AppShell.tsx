@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import lenotreLogo from "@/assets/lenotre-logo.jpeg.asset.json";
 import { useAuth, useHasRole } from "@/lib/auth-context";
 import { useTheme } from "@/lib/theme-context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -67,9 +68,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       
       <aside className="hidden md:flex w-64 bg-sidebar border-r border-sidebar-border flex-col">
         <div className="p-5 flex items-center gap-2.5 border-b border-sidebar-border">
-          <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center shadow-elegant">
-            <Leaf className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <img src={lenotreLogo.url} alt="Le Nôtre" className="w-9 h-9 rounded-lg object-cover shadow-elegant" />
           <div>
             <div className="font-bold text-sm tracking-tight text-sidebar-foreground">Le Nôtre</div>
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Workspace</div>

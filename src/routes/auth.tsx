@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Leaf } from "lucide-react";
+import lenotreLogo from "@/assets/lenotre-logo.jpeg.asset.json";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -60,9 +60,7 @@ function AuthPage() {
     <div className="min-h-screen gradient-subtle flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center gap-2 justify-center mb-8">
-          <div className="w-11 h-11 rounded-xl gradient-primary flex items-center justify-center shadow-elegant">
-            <Leaf className="w-6 h-6 text-primary-foreground" />
-          </div>
+          <img src={lenotreLogo.url} alt="Le Nôtre" className="w-11 h-11 rounded-xl object-cover shadow-elegant" />
           <div>
             <h1 className="text-xl font-bold tracking-tight">Le Nôtre Workspace</h1>
             <p className="text-xs text-muted-foreground">Central corporativa</p>
