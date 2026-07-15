@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Leaf } from "lucide-react";
+import lenotreLogo from "@/assets/lenotre-logo.jpeg.asset.json";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
