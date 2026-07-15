@@ -583,6 +583,7 @@ export type Database = {
           due_time: string | null
           estimated_minutes: number | null
           id: string
+          is_private: boolean
           pinned: boolean
           priority: Database["public"]["Enums"]["task_priority"]
           sector_id: string | null
@@ -602,6 +603,7 @@ export type Database = {
           due_time?: string | null
           estimated_minutes?: number | null
           id?: string
+          is_private?: boolean
           pinned?: boolean
           priority?: Database["public"]["Enums"]["task_priority"]
           sector_id?: string | null
@@ -621,6 +623,7 @@ export type Database = {
           due_time?: string | null
           estimated_minutes?: number | null
           id?: string
+          is_private?: boolean
           pinned?: boolean
           priority?: Database["public"]["Enums"]["task_priority"]
           sector_id?: string | null
