@@ -101,6 +101,7 @@ export function TaskDialog({ taskId, open, onOpenChange }: Props) {
           due_time: rest.due_time ?? null,
           estimated_minutes: rest.estimated_minutes ?? null,
           created_by: user!.id,
+          is_private: rest.is_private ?? false,
         }).select().single();
         if (error) throw error;
         if (assignedUsers?.length) {
