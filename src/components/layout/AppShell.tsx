@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import lenotreLogo from "@/assets/lenotre-logo.jpeg.asset.json";
 import { useAuth, useHasRole } from "@/lib/auth-context";
 import { useTheme } from "@/lib/theme-context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
