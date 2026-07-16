@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import {
   LayoutDashboard, ListTodo, Calendar, Users, Settings, Bell, Search,
-  LogOut, Moon, Sun, Leaf, KanbanSquare, BarChart3, Share2, UserCircle,
+  LogOut, Moon, Sun, Leaf, KanbanSquare, BarChart3, Share2, UserCircle, NotebookPen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -27,6 +27,7 @@ const nav = [
   { to: "/tarefas", icon: ListTodo, label: "Tarefas", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/kanban", icon: KanbanSquare, label: "Kanban", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/agenda", icon: Calendar, label: "Agenda", roles: ["admin", "rh", "gestor", "colaborador"] as const },
+  { to: "/notas", icon: NotebookPen, label: "Anotações", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/compartilhamentos", icon: Share2, label: "Compartilhar", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/relatorios", icon: BarChart3, label: "Relatórios", roles: ["admin", "rh", "gestor"] as const },
   { to: "/usuarios", icon: Users, label: "Usuários", roles: ["admin", "rh"] as const },
