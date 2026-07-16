@@ -115,7 +115,7 @@ function NotesPage() {
   const updateNote = useMutation({
     mutationFn: async (patch: Partial<Note> & { id: string }) => {
       const { id, ...rest } = patch;
-      const { error } = await supabase.from("notes").update(rest).eq("id", id);
+      const { error } = await supabase.from("notes").update(rest as never).eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["notes"] }),
