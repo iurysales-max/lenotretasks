@@ -375,7 +375,7 @@ function ShareNoteDialog({ open, onOpenChange, note }: { open: boolean; onOpenCh
       await supabase.from("notifications").insert({
         user_id: targetId, type: "share",
         title: "Anotação compartilhada com você",
-        body: `${note.icon || "📄"} ${note.title}`,
+        message: `${note.icon || "📄"} ${note.title}`,
       });
     },
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["note-shares", note.id] }); toast.success("Compartilhado"); },
