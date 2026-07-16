@@ -240,6 +240,97 @@ export type Database = {
           },
         ]
       }
+      note_shares: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          note_id: string
+          permission: Database["public"]["Enums"]["share_permission"]
+          shared_with_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          note_id: string
+          permission?: Database["public"]["Enums"]["share_permission"]
+          shared_with_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          note_id?: string
+          permission?: Database["public"]["Enums"]["share_permission"]
+          shared_with_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_shares_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notes: {
+        Row: {
+          archived: boolean
+          content: Json
+          cover_url: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          is_private: boolean
+          owner_id: string
+          parent_id: string | null
+          pinned: boolean
+          position: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          archived?: boolean
+          content?: Json
+          cover_url?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_private?: boolean
+          owner_id: string
+          parent_id?: string | null
+          pinned?: boolean
+          position?: number
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          archived?: boolean
+          content?: Json
+          cover_url?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_private?: boolean
+          owner_id?: string
+          parent_id?: string | null
+          pinned?: boolean
+          position?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
@@ -684,8 +775,17 @@ export type Database = {
     }
     Functions: {
       can_view_event: { Args: { _event_id: string }; Returns: boolean }
+      can_view_note: { Args: { _note_id: string }; Returns: boolean }
       can_view_task: { Args: { _task_id: string }; Returns: boolean }
       current_user_sector: { Args: never; Returns: string }
+      has_note_access: {
+        Args: { _note_id: string; _viewer: string }
+        Returns: boolean
+      }
+      has_note_edit: {
+        Args: { _note_id: string; _viewer: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
