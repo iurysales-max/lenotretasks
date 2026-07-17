@@ -104,6 +104,203 @@ export type Database = {
           },
         ]
       }
+      candidate_activities: {
+        Row: {
+          candidate_id: string
+          content: string | null
+          created_at: string
+          created_by: string
+          id: string
+          metadata: Json
+          type: string
+        }
+        Insert: {
+          candidate_id: string
+          content?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          metadata?: Json
+          type: string
+        }
+        Update: {
+          candidate_id?: string
+          content?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          metadata?: Json
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_activities_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_interviews: {
+        Row: {
+          candidate_id: string
+          created_at: string
+          created_by: string
+          duration_minutes: number
+          event_id: string | null
+          id: string
+          interviewer_id: string | null
+          location: string | null
+          meeting_url: string | null
+          notes: string | null
+          outcome: string | null
+          scheduled_at: string
+          updated_at: string
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string
+          created_by: string
+          duration_minutes?: number
+          event_id?: string | null
+          id?: string
+          interviewer_id?: string | null
+          location?: string | null
+          meeting_url?: string | null
+          notes?: string | null
+          outcome?: string | null
+          scheduled_at: string
+          updated_at?: string
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string
+          created_by?: string
+          duration_minutes?: number
+          event_id?: string | null
+          id?: string
+          interviewer_id?: string | null
+          location?: string | null
+          meeting_url?: string | null
+          notes?: string | null
+          outcome?: string | null
+          scheduled_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidate_interviews_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidate_interviews_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      candidate_status: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          is_terminal: boolean
+          name: string
+          position: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          is_terminal?: boolean
+          name: string
+          position?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          is_terminal?: boolean
+          name?: string
+          position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      candidates: {
+        Row: {
+          city: string | null
+          created_at: string
+          created_by: string
+          email: string | null
+          hired_profile_id: string | null
+          id: string
+          job_title: string | null
+          name: string
+          notes: string | null
+          owner_id: string | null
+          phone: string | null
+          resume_url: string | null
+          status_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          created_by: string
+          email?: string | null
+          hired_profile_id?: string | null
+          id?: string
+          job_title?: string | null
+          name: string
+          notes?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          resume_url?: string | null
+          status_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          created_by?: string
+          email?: string | null
+          hired_profile_id?: string | null
+          id?: string
+          job_title?: string | null
+          name?: string
+          notes?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          resume_url?: string | null
+          status_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "candidates_hired_profile_id_fkey"
+            columns: ["hired_profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "candidates_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "candidate_status"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           color: string
@@ -774,6 +971,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_candidate: { Args: { _candidate_id: string }; Returns: boolean }
       can_view_event: { Args: { _event_id: string }; Returns: boolean }
       can_view_note: { Args: { _note_id: string }; Returns: boolean }
       can_view_task: { Args: { _task_id: string }; Returns: boolean }
