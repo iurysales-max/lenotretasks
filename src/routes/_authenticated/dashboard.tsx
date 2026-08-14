@@ -86,7 +86,7 @@ function DashboardPage() {
         <Card className="lg:col-span-2 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-lg">Tarefas de hoje</h2>
-            <Link to="/tarefas" className="text-xs text-primary hover:underline">Ver todas →</Link>
+            <Link to="/tarefas" search={{ open: undefined }} className="text-xs text-primary hover:underline">Ver todas →</Link>
           </div>
           <div className="space-y-2">
             {todayTasks.length === 0 && <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma tarefa para hoje 🎉</p>}
