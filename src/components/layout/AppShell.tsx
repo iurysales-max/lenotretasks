@@ -29,6 +29,7 @@ const nav = [
   { to: "/agenda", icon: Calendar, label: "Agenda", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/notas", icon: NotebookPen, label: "Anotações", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/recrutamento", icon: UserPlus, label: "Recrutamento", roles: ["admin", "rh", "gestor", "colaborador"] as const },
+  { to: "/ponto", icon: Clock, label: "Ponto", roles: ["admin", "rh", "gestor"] as const },
   { to: "/compartilhamentos", icon: Share2, label: "Compartilhar", roles: ["admin", "rh", "gestor", "colaborador"] as const },
   { to: "/relatorios", icon: BarChart3, label: "Relatórios", roles: ["admin", "rh", "gestor"] as const },
   { to: "/usuarios", icon: Users, label: "Usuários", roles: ["admin", "rh"] as const },
