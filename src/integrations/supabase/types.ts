@@ -366,6 +366,45 @@ export type Database = {
           },
         ]
       }
+      employees: {
+        Row: {
+          active: boolean
+          cargo: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          name: string
+          pin: string | null
+          tangerino_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          cargo?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          pin?: string | null
+          tangerino_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          cargo?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          pin?: string | null
+          tangerino_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       event_attendees: {
         Row: {
           event_id: string
