@@ -69,23 +69,16 @@ export const getPunchDay = createServerFn({ method: "POST" })
     if (!auth) throw new Error("Credencial do Tangerino não configurada");
 
     const { start, end } = dayRangeMillis(data.date);
-    const rows: RawPunch[] = [];
-    let page = 0;
-    let totalPages = 1;
+    const url =
+      `https://apis.tangerino.com.br/punch/?startDateInMillis=${start}&endDateInMillis=${end}` +
+      `&size=500&showFired=false`;
+    const res = await fetch(url, {
+      headers: { Authorization: auth, Accept: "application/json" },
+    });
+    if (!res.ok) throw new Error(`Erro ao consultar o Tangerino (HTTP ${res.status})`);
+    const json = (await res.json()) as { content?: RawPunch[] };
+    const rows: RawPunch[] = json.content ?? [];
 
-    while (page < totalPages && page < 30) {
-      const url =
-        `https://apis.tangerino.com.br/punch/?startDateInMillis=${start}&endDateInMillis=${end}` +
-        `&pageSize=20&pageNumber=${page}&showFired=false`;
-      const res = await fetch(url, {
-        headers: { Authorization: auth, Accept: "application/json" },
-      });
-      if (!res.ok) throw new Error(`Erro ao consultar o Tangerino (HTTP ${res.status})`);
-      const json = (await res.json()) as { content?: RawPunch[]; totalPages?: number };
-      rows.push(...(json.content ?? []));
-      totalPages = json.totalPages ?? 1;
-      page += 1;
-    }
 
     const byEmployee = new Map<number, RawPunch[]>();
     for (const r of rows) {
