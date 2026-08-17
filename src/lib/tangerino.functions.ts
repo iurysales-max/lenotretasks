@@ -79,16 +79,20 @@ export const getPunchDay = createServerFn({ method: "POST" })
     const json = (await res.json()) as { content?: RawPunch[] };
     const rows: RawPunch[] = json.content ?? [];
 
-
     const byEmployee = new Map<number, RawPunch[]>();
+    const seen = new Set<string>();
     for (const r of rows) {
       if (r.excluded) continue;
       const id = r.employeeId;
       if (!id) continue;
+      const key = `${id}|${r.dateIn ?? ""}|${r.dateOut ?? ""}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
       const list = byEmployee.get(id) ?? [];
       list.push(r);
       byEmployee.set(id, list);
     }
+
 
     const employees: EmployeeDay[] = [];
     for (const [id, list] of byEmployee) {
