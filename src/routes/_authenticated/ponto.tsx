@@ -282,7 +282,7 @@ function PontoPage() {
                       </div>
                     </td>
                     {!e ? (
-                      <td colSpan={5} className="px-4 py-3 text-muted-foreground">Sem registro neste dia</td>
+                      <td colSpan={6} className="px-4 py-3 text-muted-foreground">Sem registro neste dia</td>
                     ) : (
                       <>
                         <td className="px-4 py-3">
