@@ -256,6 +256,8 @@ function PontoPage() {
                       <div className="font-medium flex items-center gap-2">
                         {r.name}
                         {!r.cadastrado && <Badge variant="secondary" className="font-normal text-[10px]">fora do cadastro</Badge>}
+                        {r.punch && <Badge variant="outline" className="font-normal text-[10px]">{r.punch.fonte === "api" ? "API" : "planilha"}</Badge>}
+
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {r.email ?? r.cargo ?? "—"}{r.pin ? ` · PIN ${r.pin}` : ""}
