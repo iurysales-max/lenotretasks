@@ -341,6 +341,27 @@ function PontoPage() {
           </table>
         </div>
       </Card>
+
+      <Dialog open={confirmDelete.open} onOpenChange={(open) => setConfirmDelete({ open, row: open ? confirmDelete.row : null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir colaborador?</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja remover <strong>{confirmDelete.row?.name}</strong> do cadastro? Essa ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setConfirmDelete({ open: false, row: null })}>Cancelar</Button>
+            <Button
+              variant="destructive"
+              disabled={remove.isPending}
+              onClick={() => confirmDelete.row?.id && remove.mutate(confirmDelete.row.id)}
+            >
+              {remove.isPending ? "Excluindo…" : "Excluir"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
