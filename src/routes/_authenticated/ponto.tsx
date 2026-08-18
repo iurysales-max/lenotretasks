@@ -105,6 +105,19 @@ function PontoPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("employees").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Funcionário removido");
+      setConfirmDelete({ open: false, row: null });
+      qc.invalidateQueries({ queryKey: ["employees"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const rows = useMemo<Row[]>(() => {
     const punches: EmployeeDay[] = data?.employees ?? [];
     const byName = new Map(punches.map((p) => [norm(p.name), p]));
