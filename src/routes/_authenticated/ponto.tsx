@@ -267,6 +267,8 @@ function PontoPage() {
                       <>
                         <td className="px-4 py-3">
                           <span className="inline-flex items-center gap-1.5"><LogIn className="w-3.5 h-3.5 text-success" />{e.entrada ?? "—"}</span>
+                          {e.localEntrada && <div className="text-[11px] text-muted-foreground max-w-[180px] truncate" title={e.localEntrada}>{e.localEntrada}</div>}
+
                         </td>
                         <td className="px-4 py-3">
                           {e.intervalos.length === 0 ? (
