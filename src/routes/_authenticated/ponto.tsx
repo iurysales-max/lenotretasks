@@ -256,6 +256,8 @@ function PontoPage() {
                       <div className="font-medium flex items-center gap-2">
                         {r.name}
                         {!r.cadastrado && <Badge variant="secondary" className="font-normal text-[10px]">fora do cadastro</Badge>}
+                        {r.punch && <Badge variant="outline" className="font-normal text-[10px]">{r.punch.fonte === "api" ? "API" : "planilha"}</Badge>}
+
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {r.email ?? r.cargo ?? "—"}{r.pin ? ` · PIN ${r.pin}` : ""}
@@ -267,6 +269,8 @@ function PontoPage() {
                       <>
                         <td className="px-4 py-3">
                           <span className="inline-flex items-center gap-1.5"><LogIn className="w-3.5 h-3.5 text-success" />{e.entrada ?? "—"}</span>
+                          {e.localEntrada && <div className="text-[11px] text-muted-foreground max-w-[180px] truncate" title={e.localEntrada}>{e.localEntrada}</div>}
+
                         </td>
                         <td className="px-4 py-3">
                           {e.intervalos.length === 0 ? (
@@ -283,6 +287,8 @@ function PontoPage() {
                         </td>
                         <td className="px-4 py-3">
                           <span className="inline-flex items-center gap-1.5"><LogOut className="w-3.5 h-3.5 text-destructive" />{e.saida ?? "—"}</span>
+                          {e.localSaida && <div className="text-[11px] text-muted-foreground max-w-[180px] truncate" title={e.localSaida}>{e.localSaida}</div>}
+
                         </td>
                         <td className="px-4 py-3 font-medium">{minutes(e.workedMinutes)}</td>
                         <td className="px-4 py-3">
