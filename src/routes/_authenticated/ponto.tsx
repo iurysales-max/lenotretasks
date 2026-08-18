@@ -119,6 +119,7 @@ function PontoPage() {
           null;
         if (match) used.add(norm(match.name));
         return {
+          id: e.id,
           key: e.id,
           name: e.name,
           email: e.email ?? match?.email ?? null,
@@ -132,6 +133,7 @@ function PontoPage() {
     for (const p of punches) {
       if (used.has(norm(p.name))) continue;
       list.push({
+        id: null,
         key: `t-${p.employeeId}`,
         name: p.name,
         email: p.email,
