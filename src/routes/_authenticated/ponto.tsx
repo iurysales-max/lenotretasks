@@ -282,7 +282,7 @@ function PontoPage() {
                       </div>
                     </td>
                     {!e ? (
-                      <td colSpan={6} className="px-4 py-3 text-muted-foreground">Sem registro neste dia</td>
+                      <td colSpan={5} className="px-4 py-3 text-muted-foreground">Sem registro neste dia</td>
                     ) : (
                       <>
                         <td className="px-4 py-3">
@@ -321,6 +321,19 @@ function PontoPage() {
                         </td>
                       </>
                     )}
+                    <td className="px-4 py-3">
+                      {r.cadastrado && r.id && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => setConfirmDelete({ open: true, row: r })}
+                          title="Excluir colaborador"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
