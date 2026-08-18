@@ -256,14 +256,15 @@ function PontoPage() {
                 <th className="text-left font-medium px-4 py-3">Saída</th>
                 <th className="text-left font-medium px-4 py-3">Trabalhado</th>
                 <th className="text-left font-medium px-4 py-3">Marcações</th>
+                <th className="text-left font-medium px-4 py-3 w-16">Ações</th>
               </tr>
             </thead>
             <tbody>
               {isFetching && !data && rows.length === 0 && (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">Carregando registros…</td></tr>
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">Carregando registros…</td></tr>
               )}
               {rows.length === 0 && !isFetching && (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">Nenhum funcionário encontrado.</td></tr>
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">Nenhum funcionário encontrado.</td></tr>
               )}
               {rows.map((r) => {
                 const e = r.punch;
