@@ -8,8 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Clock, LogIn, LogOut, Coffee, Users, AlertTriangle, RefreshCw, UserPlus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Clock, LogIn, LogOut, Coffee, Users, AlertTriangle, RefreshCw, UserPlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getPunchDay, type EmployeeDay } from "@/lib/tangerino.functions";
@@ -40,6 +40,7 @@ interface Employee {
 }
 
 interface Row {
+  id: string | null;
   key: string;
   name: string;
   email: string | null;
@@ -65,6 +66,7 @@ function PontoPage() {
   const [q, setQ] = useState("");
   const [onlyRegistered, setOnlyRegistered] = useState(false);
   const [open, setOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; row: Row | null }>({ open: false, row: null });
   const [form, setForm] = useState({ name: "", email: "", pin: "", cargo: "" });
   const fetchPunch = useServerFn(getPunchDay);
 
@@ -103,6 +105,19 @@ function PontoPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("employees").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Funcionário removido");
+      setConfirmDelete({ open: false, row: null });
+      qc.invalidateQueries({ queryKey: ["employees"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const rows = useMemo<Row[]>(() => {
     const punches: EmployeeDay[] = data?.employees ?? [];
     const byName = new Map(punches.map((p) => [norm(p.name), p]));
@@ -117,6 +132,7 @@ function PontoPage() {
           null;
         if (match) used.add(norm(match.name));
         return {
+          id: e.id,
           key: e.id,
           name: e.name,
           email: e.email ?? match?.email ?? null,
@@ -130,6 +146,7 @@ function PontoPage() {
     for (const p of punches) {
       if (used.has(norm(p.name))) continue;
       list.push({
+        id: null,
         key: `t-${p.employeeId}`,
         name: p.name,
         email: p.email,
@@ -239,14 +256,15 @@ function PontoPage() {
                 <th className="text-left font-medium px-4 py-3">Saída</th>
                 <th className="text-left font-medium px-4 py-3">Trabalhado</th>
                 <th className="text-left font-medium px-4 py-3">Marcações</th>
+                <th className="text-left font-medium px-4 py-3 w-16">Ações</th>
               </tr>
             </thead>
             <tbody>
               {isFetching && !data && rows.length === 0 && (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">Carregando registros…</td></tr>
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">Carregando registros…</td></tr>
               )}
               {rows.length === 0 && !isFetching && (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">Nenhum funcionário encontrado.</td></tr>
+                <tr><td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">Nenhum funcionário encontrado.</td></tr>
               )}
               {rows.map((r) => {
                 const e = r.punch;
@@ -303,6 +321,19 @@ function PontoPage() {
                         </td>
                       </>
                     )}
+                    <td className="px-4 py-3">
+                      {r.cadastrado && r.id && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => setConfirmDelete({ open: true, row: r })}
+                          title="Excluir colaborador"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -310,6 +341,27 @@ function PontoPage() {
           </table>
         </div>
       </Card>
+
+      <Dialog open={confirmDelete.open} onOpenChange={(open) => setConfirmDelete({ open, row: open ? confirmDelete.row : null })}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Excluir colaborador?</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja remover <strong>{confirmDelete.row?.name}</strong> do cadastro? Essa ação não pode ser desfeita.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setConfirmDelete({ open: false, row: null })}>Cancelar</Button>
+            <Button
+              variant="destructive"
+              disabled={remove.isPending}
+              onClick={() => confirmDelete.row?.id && remove.mutate(confirmDelete.row.id)}
+            >
+              {remove.isPending ? "Excluindo…" : "Excluir"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
