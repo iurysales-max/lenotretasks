@@ -8,8 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Clock, LogIn, LogOut, Coffee, Users, AlertTriangle, RefreshCw, UserPlus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Clock, LogIn, LogOut, Coffee, Users, AlertTriangle, RefreshCw, UserPlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getPunchDay, type EmployeeDay } from "@/lib/tangerino.functions";
@@ -40,6 +40,7 @@ interface Employee {
 }
 
 interface Row {
+  id: string | null;
   key: string;
   name: string;
   email: string | null;
@@ -65,6 +66,7 @@ function PontoPage() {
   const [q, setQ] = useState("");
   const [onlyRegistered, setOnlyRegistered] = useState(false);
   const [open, setOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<{ open: boolean; row: Row | null }>({ open: false, row: null });
   const [form, setForm] = useState({ name: "", email: "", pin: "", cargo: "" });
   const fetchPunch = useServerFn(getPunchDay);
 
