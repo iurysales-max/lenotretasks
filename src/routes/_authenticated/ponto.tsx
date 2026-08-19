@@ -12,7 +12,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Clock, LogIn, LogOut, Coffee, Users, AlertTriangle, RefreshCw, UserPlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { OvertimePanel } from "@/components/ponto/OvertimePanel";
 import { getPunchDay, type EmployeeDay } from "@/lib/tangerino.functions";
+
 
 export const Route = createFileRoute("/_authenticated/ponto")({
   ssr: false,
@@ -62,7 +65,9 @@ const norm = (s: string) =>
 
 function PontoPage() {
   const qc = useQueryClient();
+  const [tab, setTab] = useState("dia");
   const [date, setDate] = useState(todayISO);
+
   const [q, setQ] = useState("");
   const [onlyRegistered, setOnlyRegistered] = useState(false);
   const [open, setOpen] = useState(false);
@@ -175,6 +180,16 @@ function PontoPage() {
     };
   }, [data, employees]);
 
+  const employeeNames = useMemo(
+    () =>
+      [...new Set(employees.filter((e) => e.active).map((e) => e.name))].sort((a, b) =>
+        a.localeCompare(b, "pt-BR"),
+      ),
+    [employees],
+  );
+
+
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -183,11 +198,16 @@ function PontoPage() {
           <p className="text-muted-foreground text-sm">Quem registrou ponto no dia — entrada, intervalo e saída</p>
         </div>
         <div className="flex items-end gap-2">
-          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-[170px]" />
-          <Input placeholder="Buscar colaborador…" value={q} onChange={(e) => setQ(e.target.value)} className="w-[220px]" />
-          <Button variant="outline" size="icon" onClick={() => void refetch()} disabled={isFetching}>
-            <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
-          </Button>
+          {tab === "dia" && (
+            <>
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-[170px]" />
+              <Input placeholder="Buscar colaborador…" value={q} onChange={(e) => setQ(e.target.value)} className="w-[220px]" />
+              <Button variant="outline" size="icon" onClick={() => void refetch()} disabled={isFetching}>
+                <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+              </Button>
+            </>
+          )}
+
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button><UserPlus className="w-4 h-4 mr-2" />Novo funcionário</Button>
@@ -211,7 +231,15 @@ function PontoPage() {
         </div>
       </div>
 
+      <Tabs value={tab} onValueChange={setTab}>
+        <TabsList>
+          <TabsTrigger value="dia">Registros do dia</TabsTrigger>
+          <TabsTrigger value="extras">Horas extras</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dia" className="space-y-6 mt-6">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+
         <Card className="p-4">
           <div className="flex items-center justify-between mb-1"><span className="text-xs uppercase tracking-wider text-muted-foreground">Cadastrados</span><Users className="w-4 h-4 text-primary" /></div>
           <div className="text-3xl font-bold">{totals.cadastrados}</div>
@@ -341,6 +369,14 @@ function PontoPage() {
           </table>
         </div>
       </Card>
+      </TabsContent>
+
+        <TabsContent value="extras" className="mt-6">
+          <OvertimePanel employeeNames={employeeNames} today={todayISO()} />
+        </TabsContent>
+      </Tabs>
+
+
 
       <Dialog open={confirmDelete.open} onOpenChange={(open) => setConfirmDelete({ open, row: open ? confirmDelete.row : null })}>
         <DialogContent>

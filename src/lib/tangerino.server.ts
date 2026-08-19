@@ -1,4 +1,10 @@
-import type { EmployeeDay, PunchDayResult, PunchPair } from "./tangerino-types";
+import type {
+  EmployeeDay,
+  PunchDayResult,
+  PunchPair,
+  OvertimeEmployee,
+  OvertimeRangeResult,
+} from "./tangerino-types";
 
 const TZ_OFFSET_MINUTES = -180; // America/Sao_Paulo (UTC-3)
 
@@ -211,4 +217,75 @@ export async function getPunchDayMerged(date: string): Promise<PunchDayResult> {
 
   const employees = [...merged.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
   return { date, total: employees.length, employees };
+}
+
+function eachDate(start: string, end: string): string[] {
+  const out: string[] = [];
+  const s = new Date(`${start}T12:00:00Z`).getTime();
+  const e = new Date(`${end}T12:00:00Z`).getTime();
+  for (let t = s; t <= e; t += 86_400_000) out.push(new Date(t).toISOString().slice(0, 10));
+  return out;
+}
+
+/** Aggregates worked time per employee over a period and compares to the daily schedule. */
+export async function getOvertimeRange(
+  start: string,
+  end: string,
+  dailyExpectedMinutes: number,
+): Promise<OvertimeRangeResult> {
+  const dates = eachDate(start, end).slice(0, 62);
+  const byEmployee = new Map<string, OvertimeEmployee>();
+
+  for (let i = 0; i < dates.length; i += 5) {
+    const chunk = dates.slice(i, i + 5);
+    const results = await Promise.all(
+      chunk.map(async (d) => {
+        try {
+          return await getPunchDayMerged(d);
+        } catch {
+          return { date: d, total: 0, employees: [] } as PunchDayResult;
+        }
+      }),
+    );
+    for (const day of results) {
+      for (const e of day.employees) {
+        const key = norm(e.name);
+        const acc =
+          byEmployee.get(key) ??
+          {
+            name: e.name,
+            daysWorked: 0,
+            workedMinutes: 0,
+            expectedMinutes: 0,
+            overtimeMinutes: 0,
+            deficitMinutes: 0,
+            days: [],
+          };
+        if (e.workedMinutes > 0) {
+          acc.daysWorked += 1;
+          acc.workedMinutes += e.workedMinutes;
+          acc.expectedMinutes += dailyExpectedMinutes;
+          const diff = e.workedMinutes - dailyExpectedMinutes;
+          if (diff > 0) acc.overtimeMinutes += diff;
+          else acc.deficitMinutes += -diff;
+        }
+        acc.days.push({
+          date: day.date,
+          workedMinutes: e.workedMinutes,
+          breakMinutes: e.breakMinutes,
+          entrada: e.entrada,
+          saida: e.saida,
+          pendente: e.pendente,
+        });
+        byEmployee.set(key, acc);
+      }
+    }
+  }
+
+  const employees = [...byEmployee.values()].map((e) => ({
+    ...e,
+    days: e.days.sort((a, b) => a.date.localeCompare(b.date)),
+  }));
+  employees.sort((a, b) => b.overtimeMinutes - a.overtimeMinutes || a.name.localeCompare(b.name, "pt-BR"));
+  return { start, end, dailyExpectedMinutes, employees };
 }

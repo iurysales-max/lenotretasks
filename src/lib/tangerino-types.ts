@@ -29,3 +29,30 @@ export interface PunchDayResult {
   total: number;
   employees: EmployeeDay[];
 }
+
+export interface OvertimeDay {
+  date: string;
+  workedMinutes: number;
+  breakMinutes: number;
+  entrada: string | null;
+  saida: string | null;
+  pendente: boolean;
+}
+
+export interface OvertimeEmployee {
+  name: string;
+  daysWorked: number;
+  workedMinutes: number;
+  expectedMinutes: number;
+  overtimeMinutes: number;
+  deficitMinutes: number;
+  days: OvertimeDay[];
+}
+
+export interface OvertimeRangeResult {
+  start: string;
+  end: string;
+  dailyExpectedMinutes: number;
+  employees: OvertimeEmployee[];
+}
+
