@@ -341,6 +341,14 @@ function PontoPage() {
           </table>
         </div>
       </Card>
+      </TabsContent>
+
+        <TabsContent value="extras" className="mt-6">
+          <OvertimePanel employeeNames={employeeNames} today={todayISO()} />
+        </TabsContent>
+      </Tabs>
+
+
 
       <Dialog open={confirmDelete.open} onOpenChange={(open) => setConfirmDelete({ open, row: open ? confirmDelete.row : null })}>
         <DialogContent>
