@@ -1,4 +1,10 @@
-import type { EmployeeDay, PunchDayResult, PunchPair } from "./tangerino-types";
+import type {
+  EmployeeDay,
+  PunchDayResult,
+  PunchPair,
+  OvertimeEmployee,
+  OvertimeRangeResult,
+} from "./tangerino-types";
 
 const TZ_OFFSET_MINUTES = -180; // America/Sao_Paulo (UTC-3)
 
@@ -219,32 +225,6 @@ function eachDate(start: string, end: string): string[] {
   const e = new Date(`${end}T12:00:00Z`).getTime();
   for (let t = s; t <= e; t += 86_400_000) out.push(new Date(t).toISOString().slice(0, 10));
   return out;
-}
-
-export interface OvertimeDay {
-  date: string;
-  workedMinutes: number;
-  breakMinutes: number;
-  entrada: string | null;
-  saida: string | null;
-  pendente: boolean;
-}
-
-export interface OvertimeEmployee {
-  name: string;
-  daysWorked: number;
-  workedMinutes: number;
-  expectedMinutes: number;
-  overtimeMinutes: number;
-  deficitMinutes: number;
-  days: OvertimeDay[];
-}
-
-export interface OvertimeRangeResult {
-  start: string;
-  end: string;
-  dailyExpectedMinutes: number;
-  employees: OvertimeEmployee[];
 }
 
 /** Aggregates worked time per employee over a period and compares to the daily schedule. */
