@@ -211,7 +211,15 @@ function PontoPage() {
         </div>
       </div>
 
+      <Tabs value={tab} onValueChange={setTab}>
+        <TabsList>
+          <TabsTrigger value="dia">Registros do dia</TabsTrigger>
+          <TabsTrigger value="extras">Horas extras</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="dia" className="space-y-6 mt-6">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+
         <Card className="p-4">
           <div className="flex items-center justify-between mb-1"><span className="text-xs uppercase tracking-wider text-muted-foreground">Cadastrados</span><Users className="w-4 h-4 text-primary" /></div>
           <div className="text-3xl font-bold">{totals.cadastrados}</div>
