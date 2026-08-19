@@ -180,6 +180,16 @@ function PontoPage() {
     };
   }, [data, employees]);
 
+  const employeeNames = useMemo(
+    () =>
+      [...new Set(employees.filter((e) => e.active).map((e) => e.name))].sort((a, b) =>
+        a.localeCompare(b, "pt-BR"),
+      ),
+    [employees],
+  );
+
+
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex flex-wrap items-end justify-between gap-4">
