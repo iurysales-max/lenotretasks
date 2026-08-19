@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Card } from "@/components/ui/card";
@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown, Clock, Search, TrendingUp, TrendingDown, Users } from "lucide-react";
 import { getOvertimePeriod } from "@/lib/tangerino.functions";
 
@@ -33,6 +32,7 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
   const [dailyHours, setDailyHours] = useState("8.48");
   const [selected, setSelected] = useState<string[]>([]);
   const [pick, setPick] = useState("");
+  const [expanded, setExpanded] = useState<string[]>([]);
   const [range, setRange] = useState<{ start: string; end: string; dailyMinutes: number } | null>(null);
   const fetchOvertime = useServerFn(getOvertimePeriod);
 
@@ -196,8 +196,7 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
                   {rows.map((r) => {
                     const saldo = r.overtimeMinutes - r.deficitMinutes;
                     return (
-                      <Collapsible key={r.name} asChild>
-                        <>
+                      <React.Fragment key={r.name}>
                           <tr className="border-t border-border/60 hover:bg-accent/40 transition-colors">
                             <td className="px-4 py-3 font-medium">{r.name}</td>
                             <td className="px-4 py-3">{r.daysWorked}</td>
@@ -209,14 +208,23 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
                               {hm(saldo)}
                             </td>
                             <td className="px-4 py-3">
-                              <CollapsibleTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-7 w-7">
-                                  <ChevronDown className="w-4 h-4" />
-                                </Button>
-                              </CollapsibleTrigger>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={() =>
+                                  setExpanded((prev) =>
+                                    prev.includes(r.name) ? prev.filter((n) => n !== r.name) : [...prev, r.name],
+                                  )
+                                }
+                              >
+                                <ChevronDown
+                                  className={`w-4 h-4 transition-transform ${expanded.includes(r.name) ? "rotate-180" : ""}`}
+                                />
+                              </Button>
                             </td>
                           </tr>
-                          <CollapsibleContent asChild>
+                          {expanded.includes(r.name) && (
                             <tr className="border-t border-border/40 bg-muted/20">
                               <td colSpan={8} className="px-4 py-3">
                                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -240,9 +248,8 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
                                 </div>
                               </td>
                             </tr>
-                          </CollapsibleContent>
-                        </>
-                      </Collapsible>
+                          )}
+                        </React.Fragment>
                     );
                   })}
                 </tbody>
