@@ -198,11 +198,16 @@ function PontoPage() {
           <p className="text-muted-foreground text-sm">Quem registrou ponto no dia — entrada, intervalo e saída</p>
         </div>
         <div className="flex items-end gap-2">
-          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-[170px]" />
-          <Input placeholder="Buscar colaborador…" value={q} onChange={(e) => setQ(e.target.value)} className="w-[220px]" />
-          <Button variant="outline" size="icon" onClick={() => void refetch()} disabled={isFetching}>
-            <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
-          </Button>
+          {tab === "dia" && (
+            <>
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-[170px]" />
+              <Input placeholder="Buscar colaborador…" value={q} onChange={(e) => setQ(e.target.value)} className="w-[220px]" />
+              <Button variant="outline" size="icon" onClick={() => void refetch()} disabled={isFetching}>
+                <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+              </Button>
+            </>
+          )}
+
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button><UserPlus className="w-4 h-4 mr-2" />Novo funcionário</Button>
