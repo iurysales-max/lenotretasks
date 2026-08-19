@@ -12,7 +12,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Clock, LogIn, LogOut, Coffee, Users, AlertTriangle, RefreshCw, UserPlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { OvertimePanel } from "@/components/ponto/OvertimePanel";
 import { getPunchDay, type EmployeeDay } from "@/lib/tangerino.functions";
+
 
 export const Route = createFileRoute("/_authenticated/ponto")({
   ssr: false,
