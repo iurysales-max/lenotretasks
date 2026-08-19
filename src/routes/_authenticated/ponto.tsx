@@ -65,7 +65,9 @@ const norm = (s: string) =>
 
 function PontoPage() {
   const qc = useQueryClient();
+  const [tab, setTab] = useState("dia");
   const [date, setDate] = useState(todayISO);
+
   const [q, setQ] = useState("");
   const [onlyRegistered, setOnlyRegistered] = useState(false);
   const [open, setOpen] = useState(false);
