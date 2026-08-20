@@ -55,7 +55,8 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
   const totals = useMemo(
     () => ({
       colaboradores: rows.length,
-      extras: rows.reduce((s, r) => s + r.overtimeMinutes, 0),
+      extrasBrutas: rows.reduce((s, r) => s + r.overtimeMinutes, 0),
+      extras: rows.reduce((s, r) => s + r.overtimeMinutes - r.deficitMinutes, 0),
       deficit: rows.reduce((s, r) => s + r.deficitMinutes, 0),
       trabalhado: rows.reduce((s, r) => s + r.workedMinutes, 0),
     }),
