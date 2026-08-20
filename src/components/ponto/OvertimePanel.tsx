@@ -150,7 +150,7 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
             </Card>
             <Card className="p-4">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">Horas extras</span>
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Extras líquidas</span>
                 <TrendingUp className="w-4 h-4 text-success" />
               </div>
               <div className="text-3xl font-bold text-success">{hm(totals.extras)}</div>
