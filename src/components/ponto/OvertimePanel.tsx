@@ -181,7 +181,7 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
                     <th className="text-left font-medium px-4 py-3">Dias</th>
                     <th className="text-left font-medium px-4 py-3">Previsto</th>
                     <th className="text-left font-medium px-4 py-3">Trabalhado</th>
-                    <th className="text-left font-medium px-4 py-3">Extras</th>
+                    <th className="text-left font-medium px-4 py-3">Extras brutas</th>
                     <th className="text-left font-medium px-4 py-3">A menos</th>
                     <th className="text-left font-medium px-4 py-3">Saldo</th>
                     <th className="px-4 py-3 w-10" />
