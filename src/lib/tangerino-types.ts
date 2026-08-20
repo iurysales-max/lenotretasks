@@ -46,6 +46,8 @@ export interface OvertimeEmployee {
   expectedMinutes: number;
   overtimeMinutes: number;
   deficitMinutes: number;
+  /** Extras já descontados os atrasos (overtimeMinutes - deficitMinutes). */
+  netMinutes: number;
   days: OvertimeDay[];
 }
 
