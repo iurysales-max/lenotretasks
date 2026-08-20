@@ -153,7 +153,8 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
                 <span className="text-xs uppercase tracking-wider text-muted-foreground">Extras líquidas</span>
                 <TrendingUp className="w-4 h-4 text-success" />
               </div>
-              <div className="text-3xl font-bold text-success">{hm(totals.extras)}</div>
+              <div className={`text-3xl font-bold ${totals.extras >= 0 ? "text-success" : "text-destructive"}`}>{hm(totals.extras)}</div>
+              <p className="text-[11px] text-muted-foreground mt-1">Brutas {hm(totals.extrasBrutas)} − atrasos {hm(totals.deficit)}</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center justify-between mb-1">
