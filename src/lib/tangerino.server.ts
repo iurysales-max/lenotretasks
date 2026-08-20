@@ -259,7 +259,8 @@ export async function getOvertimeRange(
             expectedMinutes: 0,
             overtimeMinutes: 0,
             deficitMinutes: 0,
-            days: [],
+            netMinutes: 0,
+            days: [] as OvertimeEmployee["days"],
           };
         if (e.workedMinutes > 0) {
           acc.daysWorked += 1;
