@@ -55,7 +55,8 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
   const totals = useMemo(
     () => ({
       colaboradores: rows.length,
-      extras: rows.reduce((s, r) => s + r.overtimeMinutes, 0),
+      extrasBrutas: rows.reduce((s, r) => s + r.overtimeMinutes, 0),
+      extras: rows.reduce((s, r) => s + r.overtimeMinutes - r.deficitMinutes, 0),
       deficit: rows.reduce((s, r) => s + r.deficitMinutes, 0),
       trabalhado: rows.reduce((s, r) => s + r.workedMinutes, 0),
     }),
@@ -149,10 +150,11 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
             </Card>
             <Card className="p-4">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs uppercase tracking-wider text-muted-foreground">Horas extras</span>
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Extras líquidas</span>
                 <TrendingUp className="w-4 h-4 text-success" />
               </div>
-              <div className="text-3xl font-bold text-success">{hm(totals.extras)}</div>
+              <div className={`text-3xl font-bold ${totals.extras >= 0 ? "text-success" : "text-destructive"}`}>{hm(totals.extras)}</div>
+              <p className="text-[11px] text-muted-foreground mt-1">Brutas {hm(totals.extrasBrutas)} − atrasos {hm(totals.deficit)}</p>
             </Card>
             <Card className="p-4">
               <div className="flex items-center justify-between mb-1">
@@ -179,7 +181,7 @@ export function OvertimePanel({ employeeNames, today }: { employeeNames: string[
                     <th className="text-left font-medium px-4 py-3">Dias</th>
                     <th className="text-left font-medium px-4 py-3">Previsto</th>
                     <th className="text-left font-medium px-4 py-3">Trabalhado</th>
-                    <th className="text-left font-medium px-4 py-3">Extras</th>
+                    <th className="text-left font-medium px-4 py-3">Extras brutas</th>
                     <th className="text-left font-medium px-4 py-3">A menos</th>
                     <th className="text-left font-medium px-4 py-3">Saldo</th>
                     <th className="px-4 py-3 w-10" />

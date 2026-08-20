@@ -259,7 +259,8 @@ export async function getOvertimeRange(
             expectedMinutes: 0,
             overtimeMinutes: 0,
             deficitMinutes: 0,
-            days: [],
+            netMinutes: 0,
+            days: [] as OvertimeEmployee["days"],
           };
         if (e.workedMinutes > 0) {
           acc.daysWorked += 1;
@@ -284,8 +285,9 @@ export async function getOvertimeRange(
 
   const employees = [...byEmployee.values()].map((e) => ({
     ...e,
+    netMinutes: e.overtimeMinutes - e.deficitMinutes,
     days: e.days.sort((a, b) => a.date.localeCompare(b.date)),
   }));
-  employees.sort((a, b) => b.overtimeMinutes - a.overtimeMinutes || a.name.localeCompare(b.name, "pt-BR"));
+  employees.sort((a, b) => b.netMinutes - a.netMinutes || a.name.localeCompare(b.name, "pt-BR"));
   return { start, end, dailyExpectedMinutes, employees };
 }
